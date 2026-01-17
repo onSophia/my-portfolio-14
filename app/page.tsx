@@ -1,65 +1,119 @@
-import Image from "next/image";
+// src/app/page.tsx
+"use client";
 
+import { useState, useEffect, Suspense } from "react"; // Добавили Suspense
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import Header from "@/components/Header";
+import ProductCard from "@/components/ProductCard";
+import { products, Category } from "@/lib/data";
+
+// Выносим контент в отдельный компонент для Suspense (требование Next.js)
+function HomeContent() {
+  const [activeCategory, setActiveCategory] = useState<Category | 'all'>('all');
+  const searchParams = useSearchParams();
+
+  // 1. Получаем параметры из URL
+  const searchQuery = searchParams.get('q')?.toLowerCase() || "";
+  const categoryParam = searchParams.get('category');
+
+  // 2. Если в ссылке была категория (например, клик из футера), активируем её
+  useEffect(() => {
+    if (categoryParam) {
+      setActiveCategory(categoryParam as Category);
+      // Плавный скролл к каталогу
+      document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [categoryParam]);
+
+  // 3. Логика фильтрации
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.title.toLowerCase().includes(searchQuery) ||
+      product.description.toLowerCase().includes(searchQuery);
+
+    const matchesCategory = activeCategory === 'all' || product.category === activeCategory;
+
+    if (searchQuery) return matchesSearch;
+    return matchesCategory;
+  });
+
+  const categories = [
+    { id: 'all', name: 'Все товары' },
+    { id: 'santeh', name: 'Сантехника' },
+    { id: 'heating', name: 'Отопление' },
+    { id: 'furniture', name: 'Мебель' },
+    { id: 'pipes', name: 'Инженерка' },
+  ];
+
+  return (
+    <main className="min-h-screen bg-gray-50 pb-20">
+      <Header />
+
+      {/* Баннер (скрываем при поиске или выборе категории из футера) */}
+      {!searchQuery && !categoryParam && (
+        <div className="bg-linear-to-r from-blue-700 to-slate-900 text-white py-16 relative overflow-hidden">
+          <div className="container mx-auto px-4 relative z-10">
+            <h1 className="text-3xl md:text-5xl font-bold mb-4">Ремонт ванной <br /> начинается здесь</h1>
+            <p className="text-blue-100 mb-8 max-w-lg text-lg">
+              Профессиональная сантехника в Харькове. <br /> Комплектация объектов под ключ.
+            </p>
+            <button onClick={() => document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })} className="bg-white text-slate-900 font-bold py-3 px-8 rounded-full hover:shadow-lg hover:scale-105 transition-all">
+              Перейти в каталог
+            </button>
+          </div>
+          <div className="absolute right-0 top-0 h-full w-1/2 bg-blue-600/20 skew-x-12 transform origin-bottom-left"></div>
+        </div>
+      )}
+
+      <div id="catalog" className="container mx-auto px-4 mt-12">
+
+        {searchQuery ? (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold">Результаты поиска: "{searchQuery}"</h2>
+            <Link href="/" className="text-blue-600 text-sm hover:underline mt-2 inline-block">
+              Сбросить поиск
+            </Link>
+          </div>
+        ) : (
+          <div className="flex gap-2 overflow-x-auto pb-4 mb-6 scrollbar-hide">
+            {categories.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id as any)}
+                className={`px-6 py-2 rounded-full whitespace-nowrap font-medium transition-all ${activeCategory === cat.id
+                  ? 'bg-slate-900 text-white shadow-lg'
+                  : 'bg-white text-gray-600 hover:bg-gray-100 border border-transparent'
+                  }`}
+              >
+                {cat.name}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {filteredProducts.map((product) => (
+            <Link href={`/product/${product.id}`} key={product.id} className="block">
+              <ProductCard {...product} />
+            </Link>
+          ))}
+        </div>
+
+        {filteredProducts.length === 0 && (
+          <div className="text-center py-20">
+            <h3 className="text-xl font-bold text-gray-900">Ничего не найдено</h3>
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}
+
+// Оборачиваем в Suspense для безопасности
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <Suspense fallback={<div>Загрузка...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
