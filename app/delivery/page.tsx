@@ -1,4 +1,4 @@
-// src/app/delivery/page.tsx
+
 import Header from "@/components/Header";
 import { Truck, MapPin, Clock, CreditCard, Wallet, Building } from "lucide-react";
 

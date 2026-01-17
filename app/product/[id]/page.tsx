@@ -1,11 +1,11 @@
-// src/app/product/[id]/page.tsx
+
 "use client";
 
 import { use, useState, useEffect } from "react";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import { useCartStore } from "@/store/cart";
-import { useFavoritesStore } from "@/store/favorites"; // <-- Импортируем новое хранилище
+import { useFavoritesStore } from "@/store/favorites";
 import { products } from "@/lib/data";
 import {
     Check, Truck, Shield, ArrowLeft, Star, Heart, Share2,
@@ -18,15 +18,15 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
     const resolvedParams = use(params);
     const productId = Number(resolvedParams.id);
 
-    // Подключаем хранилища
+
     const { addItem } = useCartStore();
     const { toggleFavorite, items: favoriteItems } = useFavoritesStore();
 
-    // Локальные состояния для UI
+
     const [isAdded, setIsAdded] = useState(false);
     const [isShared, setIsShared] = useState(false);
 
-    // Проверяем, в избранном ли товар (синхронизируем с клиентом)
+
     const [isFav, setIsFav] = useState(false);
     useEffect(() => {
         setIsFav(favoriteItems.some(i => i.id === productId));
@@ -40,7 +40,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
         .filter(p => p.category === product.category && p.id !== product.id)
         .slice(0, 4);
 
-    // Логика добавления в корзину
+
     const handleAddToCart = () => {
         addItem({
             id: product.id,
@@ -52,7 +52,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
         setTimeout(() => setIsAdded(false), 2000);
     };
 
-    // Логика "Поделиться"
+
     const handleShare = async () => {
         const shareData = {
             title: product.title,
@@ -60,7 +60,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
             url: window.location.href,
         };
 
-        // Если браузер поддерживает нативное "Поделиться" (на телефонах)
+
         if (navigator.share) {
             try {
                 await navigator.share(shareData);
@@ -68,14 +68,14 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                 console.log("Отмена шаринга");
             }
         } else {
-            // Иначе просто копируем ссылку
+
             navigator.clipboard.writeText(window.location.href);
             setIsShared(true);
             setTimeout(() => setIsShared(false), 2000);
         }
     };
 
-    // Логика Избранного
+
     const handleFavorite = () => {
         toggleFavorite({
             id: product.id,

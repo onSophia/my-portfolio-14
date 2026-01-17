@@ -1,32 +1,32 @@
-// src/app/page.tsx
+
 "use client";
 
-import { useState, useEffect, Suspense } from "react"; // Добавили Suspense
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import { products, Category } from "@/lib/data";
 
-// Выносим контент в отдельный компонент для Suspense (требование Next.js)
+
 function HomeContent() {
   const [activeCategory, setActiveCategory] = useState<Category | 'all'>('all');
   const searchParams = useSearchParams();
 
-  // 1. Получаем параметры из URL
+
   const searchQuery = searchParams.get('q')?.toLowerCase() || "";
   const categoryParam = searchParams.get('category');
 
-  // 2. Если в ссылке была категория (например, клик из футера), активируем её
+
   useEffect(() => {
     if (categoryParam) {
       setActiveCategory(categoryParam as Category);
-      // Плавный скролл к каталогу
+
       document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [categoryParam]);
 
-  // 3. Логика фильтрации
+
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.title.toLowerCase().includes(searchQuery) ||
       product.description.toLowerCase().includes(searchQuery);
@@ -49,7 +49,6 @@ function HomeContent() {
     <main className="min-h-screen bg-gray-50 pb-20">
       <Header />
 
-      {/* Баннер (скрываем при поиске или выборе категории из футера) */}
       {!searchQuery && !categoryParam && (
         <div className="bg-linear-to-r from-blue-700 to-slate-900 text-white py-16 relative overflow-hidden">
           <div className="container mx-auto px-4 relative z-10">
@@ -109,7 +108,6 @@ function HomeContent() {
   );
 }
 
-// Оборачиваем в Suspense для безопасности
 export default function Home() {
   return (
     <Suspense fallback={<div>Загрузка...</div>}>

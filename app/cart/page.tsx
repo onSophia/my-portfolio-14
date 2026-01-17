@@ -1,4 +1,4 @@
-// src/app/cart/page.tsx
+
 "use client";
 
 import Header from "@/components/Header";
@@ -13,7 +13,7 @@ export default function CartPage() {
     const router = useRouter();
     const [isOrdering, setIsOrdering] = useState(false);
 
-    // Хак для предотвращения ошибок гидратации
+
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => {
         setIsMounted(true);
@@ -54,7 +54,6 @@ export default function CartPage() {
         );
     }
 
-    // Общие стили для кнопки (вынес отдельно, чтобы не ломалось при копировании)
     const buttonStyles = "w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-200 disabled:opacity-70 disabled:cursor-not-allowed transform active:scale-95";
 
     return (

@@ -1,4 +1,3 @@
-// src/lib/data.ts
 
 export type Category = "santeh" | "heating" | "furniture" | "pipes";
 
@@ -16,7 +15,7 @@ export interface Product {
 
 let globalId = 1;
 
-// Вспомогательная функция
+
 function createVariations(
     baseTitle: string,
     category: Category,
@@ -33,8 +32,6 @@ function createVariations(
         const hasDiscount = currentId % 3 === 0;
         const isStock = currentId % 5 !== 0;
 
-        // ИСПРАВЛЕНИЕ: Используем сервис placehold.co вместо imgholder
-        // Он надежнее работает с кириллицей и размерами
         const safeImageText = encodeURIComponent(imageText + " " + v.suffix);
         const imageUrl = `https://placehold.co/600x600/png?text=${safeImageText}&font=roboto`;
 
@@ -54,9 +51,6 @@ function createVariations(
         };
     });
 }
-
-// --- ГЕНЕРАЦИЯ КАТАЛОГА ---
-// (Остальной код остается таким же, я просто приведу его здесь для целостности копирования)
 
 const santehProducts: Product[] = [
     ...createVariations(
@@ -115,7 +109,6 @@ const santehProducts: Product[] = [
         "Hansgrohe",
         "Наслаждение водой. Система QuickClean против известкового налета. Сделано в Германии."
     ),
-    // Одиночные товары
     {
         id: globalId++,
         title: "Ванна стальная Kaldewei Eurowa 170x70",

@@ -1,4 +1,4 @@
-// src/store/favorites.ts
+
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -25,10 +25,10 @@ export const useFavoritesStore = create<FavoritesState>()(
                 const exists = items.some((i) => i.id === item.id);
 
                 if (exists) {
-                    // Если уже есть — удаляем
+
                     set({ items: items.filter((i) => i.id !== item.id) });
                 } else {
-                    // Если нет — добавляем
+
                     set({ items: [...items, item] });
                 }
             },

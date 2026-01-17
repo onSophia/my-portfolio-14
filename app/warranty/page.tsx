@@ -1,4 +1,4 @@
-// src/app/warranty/page.tsx
+
 import Header from "@/components/Header";
 import { Shield, RefreshCw, AlertTriangle, CheckCircle } from "lucide-react";
 

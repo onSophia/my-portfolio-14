@@ -1,4 +1,4 @@
-// src/app/contacts/page.tsx
+
 import Header from "@/components/Header";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 

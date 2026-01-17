@@ -1,6 +1,6 @@
-// src/store/cart.ts
+
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware'; // Чтобы корзина сохранялась после перезагрузки
+import { persist } from 'zustand/middleware';
 
 interface CartItem {
     id: number;
@@ -28,7 +28,7 @@ export const useCartStore = create<CartState>()(
                 const existingItem = currentItems.find(item => item.id === product.id);
 
                 if (existingItem) {
-                    // Если товар уже есть, увеличиваем количество
+
                     set({
                         items: currentItems.map(item =>
                             item.id === product.id
@@ -37,7 +37,7 @@ export const useCartStore = create<CartState>()(
                         )
                     });
                 } else {
-                    // Если товара нет, добавляем
+
                     set({ items: [...currentItems, { ...product, quantity: 1 }] });
                 }
             },
@@ -47,14 +47,14 @@ export const useCartStore = create<CartState>()(
                 const existingItem = currentItems.find(item => item.id === id);
 
                 if (existingItem && existingItem.quantity > 1) {
-                    // Если больше 1, уменьшаем
+
                     set({
                         items: currentItems.map(item =>
                             item.id === id ? { ...item, quantity: item.quantity - 1 } : item
                         ),
                     });
                 } else {
-                    // Если 1, удаляем совсем
+
                     set({ items: currentItems.filter(item => item.id !== id) });
                 }
             },
@@ -65,6 +65,6 @@ export const useCartStore = create<CartState>()(
                 return get().items.reduce((total, item) => total + item.price * item.quantity, 0);
             },
         }),
-        { name: 'cart-storage' } // Название в LocalStorage
+        { name: 'cart-storage' }
     )
 );

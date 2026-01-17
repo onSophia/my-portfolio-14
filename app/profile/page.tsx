@@ -1,4 +1,4 @@
-// src/app/profile/page.tsx
+
 "use client";
 
 import Header from "@/components/Header";
@@ -11,10 +11,10 @@ export default function ProfilePage() {
     const [activeTab, setActiveTab] = useState<'settings' | 'orders'>('settings');
     const [isSaved, setIsSaved] = useState(false);
 
-    // Локальное состояние формы
+
     const [formData, setFormData] = useState(user);
 
-    // Синхронизация при загрузке
+
     useEffect(() => {
         setFormData(user);
     }, [user]);

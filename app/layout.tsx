@@ -21,7 +21,7 @@ export default function RootLayout({
         className={`${inter.className} flex flex-col min-h-screen bg-gray-50 text-slate-900`}
         suppressHydrationWarning={true}
       >
-        {/* Исправлено flex-grow на grow */}
+
         <div className="grow">
           {children}
         </div>

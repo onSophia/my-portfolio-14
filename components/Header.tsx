@@ -1,17 +1,16 @@
-// src/components/Header.tsx
+
 "use client";
 
 import { ShoppingCart, Search, Menu, User } from "lucide-react";
 import Link from "next/link";
 import { useCartStore } from "@/store/cart";
-import { useRouter, useSearchParams } from "next/navigation"; // Хуки для URL
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Header() {
     const items = useCartStore((state) => state.items);
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    // Функция поиска
     const handleSearch = (term: string) => {
         const params = new URLSearchParams(searchParams);
         if (term) {
@@ -19,7 +18,7 @@ export default function Header() {
         } else {
             params.delete('q');
         }
-        // replace обновляет URL без перезагрузки страницы
+
         router.replace(`/?${params.toString()}`);
     };
 
@@ -34,7 +33,7 @@ export default function Header() {
                         <span className="hidden sm:inline">🕒 Пн-Пт: 09:00 - 19:00</span>
                     </div>
                     <div className="flex gap-4">
-                        {/* ИЗМЕНЕНИЯ ЗДЕСЬ: */}
+
                         <Link href="/delivery" className="hover:text-white transition">Доставка и оплата</Link>
                         <Link href="/warranty" className="hover:text-white transition">Гарантия и возврат</Link>
                     </div>
@@ -51,9 +50,9 @@ export default function Header() {
                 <div className="hidden md:flex flex-1 max-w-xl relative">
                     <input
                         type="text"
-                        // Берем значение из URL по умолчанию
+
                         defaultValue={searchParams.get('q')?.toString()}
-                        // При вводе меняем URL
+
                         onChange={(e) => handleSearch(e.target.value)}
                         placeholder="Поиск: 'бойлер', 'смеситель'..."
                         className="w-full bg-slate-100 border-none rounded-full py-2.5 pl-5 pr-12 text-sm focus:ring-2 ring-blue-500/50 outline-none transition-all"
@@ -89,11 +88,3 @@ export default function Header() {
     );
 }
 
-// В src/components/Header.tsx
-
-// ... (импорты и начало компонента)
-
-{/* Верхняя полоска (Top Bar) */ }
-
-
-// ... (остальной код хедера без изменений)

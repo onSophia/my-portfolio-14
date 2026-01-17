@@ -5,7 +5,7 @@ interface ProductProps {
     id: number;
     title: string;
     price: number;
-    oldPrice?: number; // Новое поле
+    oldPrice?: number;
     image: string;
     inStock: boolean;
 }
@@ -31,7 +31,7 @@ export default function ProductCard(props: ProductProps) {
                 />
             </div>
 
-            <div className="flex-grow">
+            <div className="grow">
                 <div className="text-xs text-gray-400 mb-1">Код: {1000 + props.id}</div>
                 <h3 className="font-bold text-gray-900 mb-2 leading-snug group-hover:text-blue-600 transition-colors">
                     {props.title}
@@ -58,7 +58,7 @@ export default function ProductCard(props: ProductProps) {
 
                 <button
                     onClick={(e) => {
-                        e.preventDefault(); // Чтобы не переходило по ссылке при клике на кнопку
+                        e.preventDefault();
                         addItem({ id: props.id, title: props.title, price: props.price, image: props.image });
                     }}
                     className="bg-blue-100 text-blue-700 hover:bg-blue-600 hover:text-white p-2.5 rounded-xl transition-all active:scale-95"
